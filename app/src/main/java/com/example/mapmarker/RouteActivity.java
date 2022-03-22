@@ -16,6 +16,8 @@ public class RouteActivity extends AppCompatActivity {
     private SQLiteDatabase db;
 
     private Button okButton;
+    private Button addButton;
+    private Button deleteButton;
     private EditText nameField;
 
     private Cursor route;
@@ -31,6 +33,8 @@ public class RouteActivity extends AppCompatActivity {
 
         okButton = findViewById( R.id.okButton );
         nameField = findViewById( R.id.nameField );
+        addButton = findViewById( R.id.addPointButton );
+        deleteButton = findViewById( R.id.deletePointButton );
 
         if( i.getExtras() != null && i.getExtras().containsKey( "id" ) )
         {
@@ -55,6 +59,15 @@ public class RouteActivity extends AppCompatActivity {
                 db.insert( "route", null, v );
 
                 finish();
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent( RouteActivity.this, MapsActivity.class );
+
+                startActivity(i);
             }
         });
     }
