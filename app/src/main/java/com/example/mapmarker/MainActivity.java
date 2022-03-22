@@ -74,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
 
                 b.putLong( "id", routeSpinner.getSelectedItemId() );
 
-                startActivity( i, b );
+                i.putExtras( b );
+
+                startActivity( i );
             }
         });
 
@@ -84,5 +86,12 @@ public class MainActivity extends AppCompatActivity {
                 routeSpinner.getSelectedItemId();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        refresh();
     }
 }
