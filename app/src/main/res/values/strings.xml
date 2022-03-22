@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MapMarker</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="add">Adicionar</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Excluir</string>
+    <string name="name">Nome</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="ok">Concluir</string>
+</resources>
