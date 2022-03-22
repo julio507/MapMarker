@@ -22,6 +22,13 @@ public class RouteActivity extends AppCompatActivity {
 
     private Cursor route;
 
+    private boolean delete = false;
+
+    private Cursor getRoute( long id )
+    {
+        return db.query( "route", new String[]{ "_id", "name" }, "_id=?", new String[]{ String.valueOf( id ) }, null, null, null );
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +45,7 @@ public class RouteActivity extends AppCompatActivity {
 
         if( i.getExtras() != null && i.getExtras().containsKey( "id" ) )
         {
-            route = db.query( "route", new String[]{ "_id", "name" }, "_id=?", new String[]{ String.valueOf( i.getExtras().getLong( "id" ) ) }, null, null, null );
+            route = getRoute( i.getExtras().getLong( "id" ) );
 
             if( route.moveToFirst() ) {
                 nameField.setText(route.getString(1));
@@ -47,6 +54,13 @@ public class RouteActivity extends AppCompatActivity {
             {
                 route = null;
             }
+        }
+
+        if( route == null )
+        {
+            route = getRoute( db.insert( "route", null, new ContentValues() ) );
+
+            delete = true;
         }
 
         okButton.setOnClickListener(new View.OnClickListener() {
@@ -70,5 +84,15 @@ public class RouteActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if( delete )
+        {
+//            db.delete( "route" )
+        }
     }
 }
