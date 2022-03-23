@@ -27,31 +27,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="308dp"
-        android:layout_height="369dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="82dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/addPointButton"
-        android:layout_width="57dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="335dp"
-        android:layout_marginTop="87dp"
-        android:text="@string/plus"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/deletePointButton"
-        android:layout_width="57dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="335dp"
-        android:layout_marginTop="133dp"
-        android:text="@string/minus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="76dp"
+        android:text="@string/record"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,9 +41,9 @@
         android:id="@+id/okButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="456dp"
-        android:text="@android:string/ok"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="76dp"
+        android:text="@string/save"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

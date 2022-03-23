@@ -26,7 +26,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL( "create table point(" +
                                 "_id integer primary key autoincrement," +
                                 "ref_route integer not null, " +
-                                "number integer, " +
                                 "lon text, " +
                                 "lat text, " +
                                 "foreign key( ref_route ) references route (id) )" );

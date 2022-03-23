@@ -1,9 +1,18 @@
 package com.example.mapmarker;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
 import android.app.ActionBar;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 
@@ -24,9 +33,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
 
-    private FloatingActionButton okButton;
+    private SQLiteDatabase db;
 
-    private LatLng point;
+    private FloatingActionButton finishButton;
+
+    private int routeId;
+
+    private LocationManager loc;
+
+    private LocationListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +55,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        okButton = findViewById( R.id.okPointButton );
+        db = new DatabaseManager( this, "MapMarker", null, 1 ).getReadableDatabase();
 
-        okButton.setOnClickListener(new View.OnClickListener() {
+        routeId = getIntent().getExtras().getInt( "id" );
+
+        db.delete( "point", "ref_route=?", new String[] { String.valueOf( routeId ) } );
+
+        finishButton = findViewById( R.id.okPointButton );
+
+        finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -63,20 +84,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        loc = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        listener = new LocationListener() {
             @Override
-            public void onMapClick(@NonNull LatLng latLng) {
+            public void onLocationChanged(@NonNull Location location) {
 
-                point = latLng;
+                mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( location.getLatitude(), location.getLongitude() ), 15 ) );
+                mMap.addMarker( new MarkerOptions().position( new LatLng( location.getLatitude(), location.getLongitude() ) ) );
 
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(latLng));
+                ContentValues c = new ContentValues();
+
+                c.put( "ref_route", routeId );
+                c.put( "lon", location.getLongitude() );
+                c.put( "lat", location.getLatitude() );
+
+                db.insert( "point", null, c );
             }
-        });
+        };
+
+        loc.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, listener );
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        loc.removeUpdates( listener );
     }
 }

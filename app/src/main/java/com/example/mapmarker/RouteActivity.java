@@ -17,7 +17,6 @@ public class RouteActivity extends AppCompatActivity {
 
     private Button okButton;
     private Button addButton;
-    private Button deleteButton;
     private EditText nameField;
 
     private Cursor route;
@@ -41,7 +40,6 @@ public class RouteActivity extends AppCompatActivity {
         okButton = findViewById( R.id.okButton );
         nameField = findViewById( R.id.nameField );
         addButton = findViewById( R.id.addPointButton );
-        deleteButton = findViewById( R.id.deletePointButton );
 
         if( i.getExtras() != null && i.getExtras().containsKey( "id" ) )
         {
@@ -58,7 +56,12 @@ public class RouteActivity extends AppCompatActivity {
 
         if( route == null )
         {
-            route = getRoute( db.insert( "route", null, new ContentValues() ) );
+            ContentValues v = new ContentValues();
+            v.put( "name", "" );
+
+            route = getRoute( db.insert( "route", null, v ) );
+
+            route.moveToFirst();
 
             delete = true;
         }
@@ -70,7 +73,9 @@ public class RouteActivity extends AppCompatActivity {
 
                 v.put( "name", nameField.getText().toString() );
 
-                db.insert( "route", null, v );
+                db.update( "route", v, "_id=?", new String[]{route.getString(0) } );
+
+                delete = false;
 
                 finish();
             }
@@ -81,18 +86,14 @@ public class RouteActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent( RouteActivity.this, MapsActivity.class );
 
+                Bundle b = new Bundle();
+
+                b.putInt( "id", route.getInt(0) );
+
+                i.putExtras( b );
+
                 startActivity(i);
             }
         });
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        if( delete )
-        {
-//            db.delete( "route" )
-        }
     }
 }

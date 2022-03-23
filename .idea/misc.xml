@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/julio.rosa/AndroidStudioProjects/MapMarker/app/src/main/res/layout/activity_main.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/julio.rosa/AndroidStudioProjects/MapMarker/app/src/main/res/layout/activity_maps.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/julio.rosa/AndroidStudioProjects/MapMarker/app/src/main/res/layout/activity_route.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/julio/StudioProjects/MapMarker/app/src/main/res/layout/activity_main.xml" value="0.21829710144927536" />
         <entry key="..\:/Users/julio/StudioProjects/MapMarker/app/src/main/res/layout/activity_maps.xml" value="0.17753623188405798" />
         <entry key="..\:/Users/julio/StudioProjects/MapMarker/app/src/main/res/layout/activity_route.xml" value="0.33" />
