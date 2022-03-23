@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -63,14 +65,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if( routeId != -1 ) {
             Cursor points = db.query("point", new String[]{"_id", "ref_route", "lon", "lat"}, "ref_route=?", new String[]{ String.valueOf( routeId ) }, null, null, "_id");
 
+            PolylineOptions options = new PolylineOptions();
+
+            options.color( Color.parseColor( "#CC0000FF" ) );
+            options.width( 15 );
+            options.visible( true );
+
             while (points.moveToNext()) {
                 double lon = Double.parseDouble(points.getString(2));
                 double lat = Double.parseDouble(points.getString(3));
 
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)));
-
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(lat, lon), 10 ));
+                options.add( new LatLng(lat, lon) );
             }
+
+            points.moveToFirst();
+
+            double lon = Double.parseDouble(points.getString(2));
+            double lat = Double.parseDouble(points.getString(3));
+
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(lat, lon), 15 ));
+            googleMap.addPolyline( options );
         }
     }
 
