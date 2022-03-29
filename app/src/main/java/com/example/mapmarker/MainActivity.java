@@ -78,13 +78,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 options.add( new LatLng(lat, lon) );
             }
 
-            points.moveToFirst();
+            if( points.moveToFirst() ) {
+                double lon = Double.parseDouble(points.getString(2));
+                double lat = Double.parseDouble(points.getString(3));
 
-            double lon = Double.parseDouble(points.getString(2));
-            double lat = Double.parseDouble(points.getString(3));
-
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(lat, lon), 15 ));
-            googleMap.addPolyline( options );
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 15));
+                googleMap.addPolyline(options);
+            }
         }
     }
 
